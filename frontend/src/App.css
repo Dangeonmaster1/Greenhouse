@@ -1,0 +1,87 @@
+/* src/App.css */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+}
+
+.App {
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 40px;
+  transition: all 0.3s ease;
+}
+
+form:hover {
+  transform: translateY(-5px);
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 12px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: border 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+a {
+  text-decoration: none;
+  color: #3498db;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
