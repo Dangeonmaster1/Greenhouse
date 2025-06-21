@@ -1,4 +1,4 @@
-// src/App.jsx
+// frontend/src/App.jsx
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -8,11 +8,13 @@ import {
   Route,
   Navigate
 } from 'react-router-dom';
+
 import './App.css';
 
 // Страницы
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
 
@@ -35,6 +38,7 @@ function App() {
             <ul>
               <li><a href="/login">Вход</a></li>
               <li><a href="/register">Регистрация</a></li>
+              <li><a href="/dashboard">Мои теплицы</a></li>
             </ul>
           </nav>
           <p>© 2025 Greenhouse Monitor</p>

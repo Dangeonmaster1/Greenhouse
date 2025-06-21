@@ -1,3 +1,5 @@
+// frontend/src/components/LoginForm.jsx
+
 import React, { useState } from 'react';
 
 function LoginForm() {
@@ -49,7 +51,7 @@ function LoginForm() {
 
     return (
         <div style={{ maxWidth: '400px', margin: 'auto' }}>
-            {/* <h2>Вход</h2> */}
+            <h2>🔐 Вход</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Логин:</label>
