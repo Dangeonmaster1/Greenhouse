@@ -15,6 +15,7 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AddGreenhouse from './pages/AddGreenhouse'; // Импортируем новую страницу
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/add-greenhouse" element={<AddGreenhouse />} /> {/* Новая страница */}
           </Routes>
         </main>
 
@@ -39,6 +41,7 @@ function App() {
               <li><a href="/login">Вход</a></li>
               <li><a href="/register">Регистрация</a></li>
               <li><a href="/dashboard">Мои теплицы</a></li>
+              <li><a href="/add-greenhouse">Добавить теплицу</a></li>
             </ul>
           </nav>
           <p>© 2025 Greenhouse Monitor</p>
