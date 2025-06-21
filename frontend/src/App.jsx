@@ -1,25 +1,46 @@
+// src/App.jsx
+
 import React from 'react';
-import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
+import ReactDOM from 'react-dom/client';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate
+} from 'react-router-dom';
 import './App.css';
+
+// Страницы
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 function App() {
   return (
-    <div className="App">
-      <h1>🌱 Мониторинг теплиц</h1>
+    <Router>
+      <div className="App">
+        <header>
+          <h1>🌱 Мониторинг теплиц</h1>
+        </header>
 
-      <section>
-        <h2>Вход</h2>
-        <LoginForm />
-      </section>
+        <main>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </main>
 
-      <hr />
-
-      <section>
-        <h2>Регистрация</h2>
-        <RegisterForm />
-      </section>
-    </div>
+        <footer>
+          <nav>
+            <ul>
+              <li><a href="/login">Вход</a></li>
+              <li><a href="/register">Регистрация</a></li>
+            </ul>
+          </nav>
+          <p>© 2025 Greenhouse Monitor</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
 

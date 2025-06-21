@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function RegisterForm() {
+function RegisterForm({ isLoginMode = false }) {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -19,8 +21,12 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const url = isLoginMode
+          ? 'http://localhost:5000/api/auth/login'
+          : 'http://localhost:5000/api/auth/register';
+
         try {
-            const response = await fetch('http://localhost:5000/api/auth/register', {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -31,12 +37,19 @@ function RegisterForm() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Ошибка регистрации');
+                throw new Error(data.error || 'Ошибка');
             }
 
-            setMessage('✅ Регистрация успешна!');
+            if (isLoginMode) {
+                localStorage.setItem('token', data.token);
+                setMessage('✅ Вход выполнен!');
+                setTimeout(() => navigate('/dashboard'), 1000);
+            } else {
+                setMessage('✅ Регистрация успешна!');
+                setTimeout(() => navigate('/login'), 1000);
+            }
+
             setError('');
-            setFormData({ username: '', password: '' });
 
         } catch (err) {
             setError(err.message);
@@ -46,7 +59,6 @@ function RegisterForm() {
 
     return (
         <div style={{ maxWidth: '400px', margin: 'auto' }}>
-            {/* <h2>Регистрация</h2> */}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Логин:</label>
@@ -70,10 +82,11 @@ function RegisterForm() {
                         style={{ width: '100%', marginBottom: '10px' }}
                     />
                 </div>
-                <button type="submit" style={{ width: '100%' }}>Зарегистрироваться</button>
+                <button type="submit" style={{ width: '100%' }}>
+                    {isLoginMode ? 'Войти' : 'Зарегистрироваться'}
+                </button>
                 {message && <p style={{ color: 'green' }}>{message}</p>}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <p><a href="/login">Уже есть аккаунт? Войдите</a></p>
             </form>
         </div>
     );
