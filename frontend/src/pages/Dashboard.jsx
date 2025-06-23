@@ -1,3 +1,4 @@
+// frontend/src/pages/Dashboard.jsx
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -21,7 +22,6 @@ function Dashboard() {
                 setLoading(false);
 
             } catch (err) {
-                console.error(err.message);
                 setError('Не удалось загрузить теплицы');
                 setLoading(false);
             }
@@ -30,9 +30,28 @@ function Dashboard() {
         fetchGreenhouses();
     }, []);
 
-    if (loading) {
-        return <p>Загрузка...</p>;
-    }
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm('Вы уверены, что хотите удалить эту теплицу?');
+
+        if (!confirmDelete) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:5000/api/greenhouses/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            setGreenhouses(greenhouses.filter(gh => gh.id !== id));
+
+        } catch (err) {
+            alert('Ошибка при удалении теплицы');
+            console.error(err.message);
+        }
+    };
+
+    if (loading) return <p>Загрузка...</p>;
 
     return (
         <div style={{ maxWidth: '600px', margin: 'auto' }}>
@@ -49,12 +68,19 @@ function Dashboard() {
                             padding: '20px',
                             marginBottom: '15px',
                             borderRadius: '8px',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                            position: 'relative'
                         }}>
                             <h3>{gh.name}</h3>
                             <p><strong>Локация:</strong> {gh.location || 'не указана'}</p>
-                            <button onClick={() => window.location.href = `/greenhouse/${gh.id}`}>
+                            <button onClick={() => window.location.href = `/greenhouse?id=${gh.id}`}>
                                 Посмотреть данные
+                            </button>
+                            <button
+                                onClick={() => handleDelete(gh.id)}
+                                style={{ marginLeft: '10px', background: 'red' }}
+                            >
+                                ❌ Удалить
                             </button>
                         </li>
                     ))}

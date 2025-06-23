@@ -15,7 +15,8 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import AddGreenhouse from './pages/AddGreenhouse'; // Импортируем новую страницу
+import AddGreenhouse from './pages/AddGreenhouse';
+import GHDetailPage from './pages/GreenhouseDetail'; // новая страница
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/add-greenhouse" element={<AddGreenhouse />} /> {/* Новая страница */}
+            <Route path="/add-greenhouse" element={<AddGreenhouse />} />
+            <Route path="/greenhouse" element={<GHDetailPage />} /> {/* маршрут с ?id=1 */}
           </Routes>
         </main>
 

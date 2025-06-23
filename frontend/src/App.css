@@ -14,7 +14,10 @@ body {
   flex-direction: column;
   align-items: center;
 }
-
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
 form {
   background: white;
   padding: 30px;

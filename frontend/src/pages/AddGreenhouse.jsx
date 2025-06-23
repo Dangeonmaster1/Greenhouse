@@ -36,14 +36,13 @@ function AddGreenhouse() {
                 body: JSON.stringify(formData)
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error('Ошибка при добавлении теплицы');
+                throw new Error(data.error || 'Не удалось добавить теплицу');
             }
 
-            const greenhouse = await response.json();
             setMessage('✅ Теплица добавлена!');
-            setError('');
-
             setTimeout(() => {
                 window.location.href = '/dashboard';
             }, 1000);

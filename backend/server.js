@@ -135,45 +135,56 @@ app.get('/api/greenhouses', authenticateToken, async (req, res) => {
 app.post('/api/greenhouses', authenticateToken, async (req, res) => {
     const { name, location } = req.body;
 
-    if (!name) {
-        return res.status(400).json({ error: 'Имя теплицы обязательно' });
+    if (!name || !name.trim()) {
+        return res.status(400).json({ error: 'Название теплицы обязательно' });
     }
 
     try {
+        // Проверка на уникальное имя
+        const existingGH = await pool.query(
+            'SELECT * FROM greenhouses WHERE user_id = $1 AND name = $2',
+            [req.user.id, name]
+        );
+
+        if (existingGH.rows.length > 0) {
+            return res.status(400).json({ error: 'Теплица с таким именем уже существует' });
+        }
+
+        // Создание теплицы
         const result = await pool.query(
             'INSERT INTO greenhouses (user_id, name, location) VALUES ($1, $2, $3) RETURNING *',
             [req.user.id, name, location]
         );
 
         res.status(201).json(result.rows[0]);
+
     } catch (err) {
-        console.error(err.message);
+        console.error('Ошибка при создании теплицы:', err.message);
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 });
 
-// Получить данные датчиков для своих теплиц
-app.get('/api/sensor-data', authenticateToken, async (req, res) => {
+// Удалить теплицу
+app.delete('/api/greenhouses/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const greenhousesResult = await pool.query(
-            'SELECT id FROM greenhouses WHERE user_id = $1',
-            [req.user.id]
+        const checkOwnership = await pool.query(
+            'SELECT * FROM greenhouses WHERE id = $1 AND user_id = $2',
+            [id, req.user.id]
         );
 
-        const greenhouseIds = greenhousesResult.rows.map(g => g.id);
-
-        if (greenhouseIds.length === 0) {
-            return res.json([]);
+        if (checkOwnership.rows.length === 0) {
+            return res.status(403).json({ error: 'Нет доступа к этой теплице' });
         }
 
-        const result = await pool.query(
-            'SELECT * FROM sensor_data WHERE greenhouse_id = ANY($1)',
-            [greenhouseIds]
-        );
+        await pool.query('DELETE FROM sensor_data WHERE greenhouse_id = $1', [id]);
+        await pool.query('DELETE FROM greenhouses WHERE id = $1 AND user_id = $2', [id, req.user.id]);
 
-        res.json(result.rows);
+        res.json({ message: 'Теплица удалена' });
+
     } catch (err) {
-        console.error(err.message);
+        console.error('Ошибка при удалении:', err.message);
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 });
